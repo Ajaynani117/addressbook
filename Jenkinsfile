@@ -30,7 +30,7 @@ pipeline {
             agent any
            steps{
                 echo "PACKAGING THE CODE"
-                     sh 'package'
+                     sh 'mvn package'
                     }
                     }
                 }
