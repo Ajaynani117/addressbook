@@ -1,9 +1,5 @@
 pipeline {
-    agent none
-    tools{
-        jdk 'myjava'
-        maven 'mymaven'
-    }
+    agent any
     stages {
         stage('COMPILE') {
             agent any
