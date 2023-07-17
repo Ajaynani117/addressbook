@@ -14,13 +14,13 @@ pipeline {
             agent any
             tools{
         jdk 'myjava'
-        maven 'mymaven'
+        mvn'mymaven'
     }
             steps {
                 script{
                     echo "COMPILING THE CODE"
                     git 'https://github.com/preethid/addressbook.git'
-                    tool name: 'mymaven', type: 'maven'
+                    tool name: 'mymaven', type: 'mvn'
                     
                     sh 'mvn compile'
                 }
@@ -48,52 +48,9 @@ pipeline {
             sshagent(['DEV_SERVER_KEY']) {
         withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                      echo "PACKAGING THE CODE"
-                     sh "scp -o StrictHostKeyChecking=no server-script.sh ${DEV_SERVER_IP}:/home/ec2-user"
-                     sh "ssh -o StrictHostKeyChecking=no ${DEV_SERVER_IP} 'bash ~/server-script.sh'"
-                     sh "ssh ${DEV_SERVER_IP} sudo docker build -t  ${IMAGE_NAME} /home/ec2-user/addressbook"
-                    sh "ssh ${DEV_SERVER_IP} sudo docker login -u $USERNAME -p $PASSWORD"
-                    sh "ssh ${DEV_SERVER_IP} sudo docker push ${IMAGE_NAME}"
+                     sh 'package'
                     }
                     }
                 }
             }
         }
-        stage("Provision deploy server with TF"){
-            environment{
-             AWS_ACCESS_KEY_ID =credentials("AWS_ACCESS_KEY_ID")
-            AWS_SECRET_ACCESS_KEY=credentials("AWS_SECRET_ACCESS_KEY")
-            }
-             agent any
-                   steps{
-                       script{
-                           dir('terraform'){
-                           sh "terraform init"
-                           sh "terraform apply --auto-approve"
-                           EC2_PUBLIC_IP = sh(
-                            script: "terraform output ec2-ip",
-                            returnStdout: true
-                           ).trim()
-                       }
-                       }
-                   }
-        }
-        stage('DEPLOY ON EC2 instance'){
-            agent any
-                steps{
-                    script{
-            echo "RUN THE APP ON ec2 instance"
-               echo "Waiting for ec2 instance to initialise"
-               sleep(time: 90, unit: "SECONDS")
-               echo "Deploying the app to ec2-instance provisioned bt TF"
-               echo "${EC2_PUBLIC_IP}"
-               sshagent(['DEV_SERVER_KEY']) {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                      sh "ssh -o StrictHostKeyChecking=no ec2-user@${EC2_PUBLIC_IP} sudo docker login -u $USERNAME -p $PASSWORD"
-                      sh "ssh ec2-user@${EC2_PUBLIC_IP} sudo docker run -itd -p 8080:8080 ${IMAGE_NAME}"
-                     
-                }
-            }
-            }
-                }}    
-    }
-}
