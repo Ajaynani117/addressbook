@@ -2,7 +2,6 @@ pipeline {
     agent any
     stages {
         stage('COMPILE') {
-            agent any
             
             steps {
                 script{
@@ -12,7 +11,6 @@ pipeline {
                           }
             }
         stage('UNITTEST'){
-            agent any
             steps {
                 script{
                     echo "RUNNING THE UNIT TEST CASES"
@@ -27,7 +25,6 @@ pipeline {
             }
             }
         stage('PACKAGE'){
-            agent any
            steps{
                 echo "PACKAGING THE CODE"
                      sh 'mvn package'
