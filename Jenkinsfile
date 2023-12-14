@@ -1,23 +1,34 @@
 pipeline {
     agent any
     stages {
-        stage('Compile') {
+        stage('COMPILE') {
+            
             steps {
-                echo 'build the code '
-                sh 'mvn compile'
+                script{
+                    echo "COMPILING THE CODE"
+                    sh 'mvn compile'
+                }
+                          }
             }
-        }
-        stage('Test') {
-          steps {
-            echo 'test the code '
-            sh 'mvn test'
-          }
-        }
-        stage('Package'){
+        stage('UNITTEST'){
             steps {
-                echo 'package the code'
-              sh  'mvn package'
+                script{
+                    echo "RUNNING THE UNIT TEST CASES"
+                    sh 'mvn test'
+                }
+             
             }
-        }
-    }
-}
+            post{
+                always{
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+            }
+        stage('PACKAGE'){
+           steps{
+                echo "PACKAGING THE CODE"
+                     sh 'mvn package'
+                    }
+                    }
+                }
+       }
