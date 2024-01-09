@@ -32,7 +32,7 @@ pipeline {
                      //sh 'mvn package'
                      sh "scp -o StrictHostKeyChecking=no server-script.sh ec2-user@172.31.84.2:/home/ec2-user"
                      sh "ssh -o StrictHostKeyChecking=no server-script.sh ec2-user@172.31.84.2 ~/server-script.sh"
-                     //sh "ssh  ec2-user@172.31.84.2 sudo docker build -t imagename /home/ec2-user/addressbook"
+                     sh "ssh  ec2-user@172.31.84.2 sudo docker build -t imagename /home/ec2-user/addressbook"
                      }
                 
                     }
