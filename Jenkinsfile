@@ -12,6 +12,11 @@ pipeline {
                     echo "RUNNING THE UNIT TEST CASES"
                     sh 'mvn test'
                   }
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
             }
         stage('PACKAGE'){
            steps{
