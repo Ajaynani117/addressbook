@@ -25,6 +25,10 @@ pipeline {
             }
             }
         stage('PACKAGE'){
+            input{
+                message "Need approval to deploy prod?"
+                ok "Yes"
+            }
            steps{
                 echo "PACKAGING THE CODE"
                      sh 'mvn package'
