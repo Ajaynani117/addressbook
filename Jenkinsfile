@@ -17,12 +17,12 @@ pipeline {
                 always{
                     junit 'target/surefire-reports/*.xml'
                 }
-            }
+            }    
         stage('PACKAGE'){
            steps{
                 echo "PACKAGING THE CODE"
                      sh 'mvn package'
                     }
                 }
+        }
     }
-}
