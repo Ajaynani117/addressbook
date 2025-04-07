@@ -1,17 +1,22 @@
 pipeline {
-    agent any
+    agent none
     tools {
         jdk 'myjava'
         maven 'mymaven'
     }
     stages {
-        stage('COMPILE') {    
+        when{
+            expression {BRANCH_NAME == 'master' }
+        }
+        stage('COMPILE') { 
+            agent any   
             steps {
                     echo "COMPILING THE CODE"
                     sh 'mvn compile'
                   }
             }
         stage('UNITTEST'){
+            agent any
             steps {
                     echo "RUNNING THE UNIT TEST CASES AND GENERATING REPORTS"
                     sh 'mvn test'
