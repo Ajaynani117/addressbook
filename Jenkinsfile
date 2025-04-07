@@ -23,9 +23,15 @@ pipeline {
                 }
             }
         stage('PACKAGE'){
+            agent any
            steps{
+                sshagent(['build_server_key'])
+
                 echo "PACKAGING THE CODE"
-                     sh 'mvn package'
+                    //  sh 'mvn package'
+                 sh "scp -o strictHostkeyChecking=no server-script.sh ec2-user@ec2-54-234-105-122:/home/ec2-user"
+                 sh "ssh -o StrictHostKeyChecking=no ec2-user@ec2-54-234-105-122 bash ~ec2-user/server-script.sh"
+                //  sh   "ssh ec2-user@ec2-54-234-105-122 sudo docker build -t /home/ec2-user/addressbook"
                     }
                 }
         }
