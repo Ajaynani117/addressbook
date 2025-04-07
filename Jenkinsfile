@@ -30,8 +30,7 @@ pipeline {
             agent any
         
             steps{
-               
-                sshagent(['build_server_key'])
+                sshagent(['build_server_key']){ 
 
                     echo "PACKAGING THE CODE"
                     //  sh 'mvn package'
