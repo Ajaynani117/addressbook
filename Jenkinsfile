@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+        jdk 'myjava'
+        maven 'mymaven'
+    }
     stages {
         stage('COMPILE') {    
             steps {
@@ -12,11 +16,11 @@ pipeline {
                     echo "RUNNING THE UNIT TEST CASES AND GENERATING REPORTS"
                     sh 'mvn test'
                   }
-                post {
-                    always {
-                        junit 'target/surefire-reports/*.xml'
-                    }
-                }
+                // post {
+                //     always {
+                //         junit 'target/surefire-reports/*.xml'
+                //     }
+                // }
             }
         stage('PACKAGE'){
            steps{
