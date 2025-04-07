@@ -9,7 +9,7 @@ pipeline {
             }
         stage('UNITTEST'){
             steps {
-                    echo "RUNNING THE UNIT TEST CASES"
+                    echo "RUNNING THE UNIT TEST CASES AND GENERATING REPORTS"
                     sh 'mvn test'
                   }
                 post {
