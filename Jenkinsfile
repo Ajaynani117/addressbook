@@ -5,9 +5,6 @@ pipeline {
         maven 'mymaven'
     }
     stages {
-        when{
-            expression {BRANCH_NAME == 'master' }
-        }
         stage('COMPILE') { 
             agent any   
             steps {
