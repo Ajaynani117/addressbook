@@ -30,11 +30,11 @@ pipeline {
             agent any
         
             steps{
-                sshagent(['build_server_key']){ 
+                // sshagent(['build_server_key']){ 
                     echo "PACKAGING THE CODE and CREATING A WAR FILE"
-                    //  sh 'mvn package'
-                    sh "scp -o strictHostkeyChecking=no server-script.sh ec2-user@172.31.21.229:/home/ec2-user"
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.21.229 bash ~ec2-user/server-script.sh"
+                     sh 'mvn package'
+                    // sh "scp -o strictHostkeyChecking=no server-script.sh ec2-user@172.31.21.229:/home/ec2-user"
+                    // sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.21.229 bash ~ec2-user/server-script.sh"
                     //  sh   "ssh ec2-user@172.31.21.229 sudo docker build -t /home/ec2-user/addressbook"
                     }
                 }
